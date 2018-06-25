@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>iq_adc.h</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+<!--
+body {color: #000000; background-color: #ffffff; font-family: Monospaced}
+pre {color: #000000; background-color: #ffffff; font-family: Monospaced}
+table {color: #000000; background-color: #e9e8e2; font-family: Monospaced}
+.ST0 {font-family: Monospaced; font-weight: bold}
+.ST1 {color: #969696; font-family: Monospaced; font-weight: bold}
+.preprocessor {color: #009b00}
+.comment {color: #969696}
+.literal {color: #0000e6}
+.string {color: #ce7b00}
+-->
+</style>
+</head>
+<body>
+<table width="100%"><tr><td align="center">C:\Users\Jean-Claude\Desktop\IUT\S2\ARCHITECTURE DES SYSTEMES\TP\TP03_FF\iq_adc.h</td></tr></table>
+<pre>
+ 1 
+ 2 
+ 3 <span class="preprocessor">#</span><span class="preprocessor">include</span><span class="string">&lt;delays.h&gt;</span>
+ 4 <span class="preprocessor">#</span><span class="preprocessor">include</span><span class="string">&lt;adc.h&gt;</span>
+ 5 
+ 6 <span class="literal">void</span> <span class="ST0">init_adc</span>()
+ 7 {
+ 8  OpenADC( ADC_FOSC_32      &amp;
+ 9          ADC_RIGHT_JUST   &amp;
+10          ADC_16_TAD,
+11          ADC_CH0          &amp;
+12          ADC_REF_VDD_VSS  &amp;
+13          ADC_INT_OFF, 12  );
+14 
+15 
+16 Delay10TCYx( 5 );     <span class="comment">//</span> <span class="comment">Delay</span> <span class="comment">for</span><span class="comment"> 50</span><span class="comment">TCY</span>
+17 
+18 }
+19 
+20 <span class="literal">unsigned</span> <span class="literal">char</span> <span class="ST0">lecture_analogique</span>()
+21 {
+22 ConvertADC();         <span class="comment">//</span> <span class="comment">Start</span> <span class="comment">conversion</span><span class="ST1">\par</span>
+23 <span class="literal">while</span>( BusyADC() );   <span class="comment">//</span> <span class="comment">Wait</span> <span class="comment">for</span> <span class="comment">completion</span><span class="ST1">\par</span>
+24 <span class="literal">return</span>(ReadADC() &gt;&gt; 2);   <span class="comment">//</span> <span class="comment">Read</span> <span class="comment">result</span><span class="ST1">\par</span>
+25 }
+26 
+27 <span class="literal">unsigned</span> <span class="literal">char</span> <span class="ST0">convert_hex_dec</span>(<span class="literal">unsigned</span> <span class="literal">char</span> hex) {
+28 
+29         <span class="literal">unsigned</span> <span class="literal">char</span> deb;
+30         <span class="literal">unsigned</span> <span class="literal">char</span> fin;      
+31         
+32         deb = hex % 10;
+33         fin = hex / 10;
+34         
+35         <span class="literal">return</span> deb + fin*16;
+36 }
+37 
+38 
+</pre></body>
+</html>

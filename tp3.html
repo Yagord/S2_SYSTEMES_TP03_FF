@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>tp3.c</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+<!--
+body {color: #000000; background-color: #ffffff; font-family: Monospaced}
+pre {color: #000000; background-color: #ffffff; font-family: Monospaced}
+table {color: #000000; background-color: #e9e8e2; font-family: Monospaced}
+.preprocessor {color: #009b00}
+.comment {color: #969696}
+.literal {color: #0000e6}
+.pragma-omp-keyword-directive {color: #2e92c7}
+.string {color: #ce7b00}
+-->
+</style>
+</head>
+<body>
+<table width="100%"><tr><td align="center">C:\Users\Jean-Claude\Desktop\IUT\S2\ARCHITECTURE DES SYSTEMES\TP\TP03_FF\tp3.c</td></tr></table>
+<pre>
+ 1 
+ 2 <span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="string">&quot;iq.h&quot;</span>
+ 3 <span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="string">&quot;iq_adc.h&quot;</span>
+ 4 <span class="preprocessor">#</span><span class="preprocessor">define</span> <span class="pragma-omp-keyword-directive">byte</span> <span class="literal">unsigned</span> <span class="literal">char</span>
+ 5 
+ 6 byte *trisb = (byte *)0xf93 ;
+ 7 byte *portb = (byte *)0xf81 ;
+ 8 byte *trisc = (byte *)0xf94 ;
+ 9 byte *portc = (byte *)0xf82 ;
+10 
+11 
+12 <span class="literal">void</span> init_adc();
+13 byte lecture_analogique();
+14 
+15 
+16 <span class="literal">void</span> main(<span class="literal">void</span>) {
+17         *trisb=0;
+18         *trisc=1;
+19         init_adc();
+20         
+21         *portc = 0;
+22         <span class="literal">while</span>(1) {
+23                 <span class="literal">unsigned</span> <span class="literal">char</span> temperature = convert_hex_dec(lecture_analogique()/5);
+24                 *portb = temperature;   <span class="comment">//</span> <span class="comment">Read</span> <span class="comment">result</span>
+25                 
+26                 <span class="literal">if</span> (temperature &lt; 20) {
+27                         *portc = *portc &amp; 0x04;
+28                         *portc = *portc | 0x02;
+29                 }
+30                 <span class="literal">else</span> {
+31                         *portc = *portc &amp; 0x02;
+32                         *portc = *portc | 0x04;
+33                 }
+34         }
+35 }
+</pre></body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>it.h</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+<!--
+body {color: #000000; background-color: #ffffff; font-family: Monospaced}
+pre {color: #000000; background-color: #ffffff; font-family: Monospaced}
+table {color: #000000; background-color: #e9e8e2; font-family: Monospaced}
+.highlight-caret-row {background-color: #e9eff8}
+.ST2 {font-family: Monospaced; font-weight: bold}
+.ST1 {background-color: #e9eff8; font-family: Monospaced; font-weight: bold}
+.comment {color: #969696}
+.preprocessor {color: #009b00}
+.ST0 {color: #0000e6; background-color: #e9eff8}
+.literal {color: #0000e6}
+-->
+</style>
+</head>
+<body>
+<table width="100%"><tr><td align="center">C:\Users\Jean-Claude\Desktop\IUT\S2\ARCHITECTURE DES SYSTEMES\TP\TP03_FF\it.h</td></tr></table>
+<pre>
+ 1 <span class="ST0">void</span> <span class="ST1">it</span> <span class="highlight-caret-row">(</span><span class="ST0">void</span><span class="highlight-caret-row">)</span><span class="highlight-caret-row">;</span>
+ 2 <span class="literal">void</span> <span class="ST2">it_int0</span>();
+ 3 <span class="literal">void</span> <span class="ST2">it_int1</span>();
+ 4 <span class="literal">void</span> <span class="ST2">it_tmr0</span>();
+ 5 <span class="comment">//</span> <span class="comment">Initialisation</span> <span class="comment">du</span> <span class="comment">vecteur</span> <span class="comment">d</span><span class="comment">’</span><span class="comment">interruption</span>
+ 6 <span class="preprocessor">#</span><span class="preprocessor">pragma</span> code adresse_it=0x08 <span class="comment">//</span><span class="comment">Place</span> <span class="comment">le</span> <span class="comment">code</span><span class="comment"> à </span><span class="comment">l</span><span class="comment">’</span><span class="comment">adresse</span><span class="comment"> 0</span><span class="comment">x08</span>
+ 7 <span class="literal">void</span> <span class="ST2">int_vect</span>(<span class="literal">void</span>)
+ 8 {
+ 9  <span class="literal">_asm</span> 
+10         <span class="literal">goto</span> it 
+11 <span class="literal">_endasm</span> <span class="comment">//</span> <span class="comment">Branchement</span> <span class="comment">au</span> <span class="comment">S</span><span class="comment">/</span><span class="comment">P</span> <span class="comment">d</span><span class="comment">’</span><span class="comment">it</span>
+12 }
+13 <span class="preprocessor">#</span><span class="preprocessor">pragma</span> code <span class="comment">//</span> <span class="comment">retour</span><span class="comment"> à </span><span class="comment">la</span> <span class="comment">section</span> <span class="comment">par</span> <span class="comment">d</span><span class="comment">é</span><span class="comment">faut</span>
+14 <span class="comment">//</span><span class="comment">sous</span> <span class="comment">programme</span> <span class="comment">de</span> <span class="comment">traitement</span> <span class="comment">de</span> <span class="comment">l</span><span class="comment">’</span><span class="comment">interruption</span>
+15 <span class="preprocessor">#</span><span class="preprocessor">pragma</span> interrupt it
+16 <span class="literal">void</span> <span class="ST2">it</span> (<span class="literal">void</span>)
+17 {
+18 <span class="comment">/*</span> <span class="comment">placer</span> <span class="comment">le</span> <span class="comment">code</span> <span class="comment">de</span> <span class="comment">traitement</span> <span class="comment">de</span> <span class="comment">l</span><span class="comment">&#39;</span><span class="comment">IT</span> <span class="comment">ici</span> <span class="comment">*/</span>
+19 <span class="literal">if</span> (INTCON3bits.INT1IF) {
+20 it_int1();
+21 INTCON3bits.INT1IF=0; <span class="comment">//</span> <span class="comment">efface</span> <span class="comment">drapreau</span> <span class="comment">d</span><span class="comment">&#39;</span><span class="comment">ITx</span>
+22 }
+23 <span class="literal">if</span> (INTCONbits.INT0IF) {
+24 it_int0();
+25 INTCONbits.INT0IF=0; <span class="comment">//</span> <span class="comment">efface</span> <span class="comment">drapreau</span> <span class="comment">d</span><span class="comment">&#39;</span><span class="comment">ITx</span>
+26 }
+27 <span class="literal">if</span> (INTCONbits.TMR0IF) {
+28 it_tmr0();
+29 TMR0H = 0x3C;                    <span class="comment">//</span><span class="comment">clear</span> <span class="comment">timer</span>
+30 TMR0L = 0x95;    
+31 INTCONbits.TMR0IF=0; <span class="comment">//</span> <span class="comment">efface</span> <span class="comment">drapreau</span> <span class="comment">d</span><span class="comment">&#39;</span><span class="comment">ITx</span>
+32 }
+33 }
+34 
+35 <span class="literal">void</span> <span class="ST2">init_it_int0</span>()
+36 {
+37 INTCONbits.INT0IE = 1;
+38 INTCONbits.GIEH = 1; 
+39 }
+40 
+41 <span class="literal">void</span> <span class="ST2">init_it_int1</span>()
+42 {
+43 INTCON3bits.INT1IE = 1;
+44 INTCONbits.GIEH = 1; 
+45 }
+46 
+47 <span class="literal">void</span> <span class="ST2">init_it_tmr0</span>()
+48 {
+49 INTCON2bits.TMR0IP=1;
+50 INTCONbits.TMR0IE = 1;
+51 TMR0H = 0x3C;                    <span class="comment">//</span><span class="comment">clear</span> <span class="comment">timer</span>
+52 TMR0L = 0x95;                    <span class="comment">//</span><span class="comment">clear</span> <span class="comment">timer</span>
+53 T0CON = 0x80;  
+54 INTCONbits.GIEH = 1; 
+55 }
+56 
+</pre></body>
+</html>
